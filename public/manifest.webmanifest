@@ -1,0 +1,10 @@
+{
+  "name": "Apex",
+  "short_name": "Apex",
+  "description": "Local-first golf launch monitor POC.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7f2",
+  "theme_color": "#15221d",
+  "icons": []
+}

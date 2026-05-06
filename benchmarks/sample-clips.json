@@ -1,0 +1,13 @@
+[
+  {
+    "id": "synthetic-240fps-side-launch",
+    "description": "Generated bright-ball launch path used by automated unit and benchmark tests.",
+    "fps": 240,
+    "frameCount": 30,
+    "viewType": "side",
+    "expected": {
+      "minDetections": 20,
+      "maxRuntimeMs": 750
+    }
+  }
+]

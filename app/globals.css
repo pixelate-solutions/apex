@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f7f2;
+  --foreground: #101513;
+  --card: #ffffff;
+  --card-foreground: #101513;
+  --popover: #ffffff;
+  --popover-foreground: #101513;
+  --primary: #15221d;
+  --primary-foreground: #f8fff8;
+  --secondary: #e6ece3;
+  --secondary-foreground: #15221d;
+  --muted: #e9eee7;
+  --muted-foreground: #62706a;
+  --accent: #d9f476;
+  --accent-foreground: #11170f;
+  --destructive: #d84d3f;
+  --destructive-foreground: #fff8f6;
+  --border: #d8dfd4;
+  --input: #d8dfd4;
+  --ring: #7da36b;
+  --radius: 1rem;
+}
+
+.dark {
+  --background: #0b100e;
+  --foreground: #eef6ec;
+  --card: #111a16;
+  --card-foreground: #eef6ec;
+  --popover: #111a16;
+  --popover-foreground: #eef6ec;
+  --primary: #e6f8dc;
+  --primary-foreground: #0e1712;
+  --secondary: #1b2922;
+  --secondary-foreground: #eef6ec;
+  --muted: #1b2922;
+  --muted-foreground: #9cad9f;
+  --accent: #d9f476;
+  --accent-foreground: #11170f;
+  --destructive: #ff6b5d;
+  --destructive-foreground: #190807;
+  --border: #26362e;
+  --input: #26362e;
+  --ring: #b8d96b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  min-height: 100%;
+  background: var(--background);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(180deg, rgb(244 247 242 / 0.96), rgb(237 243 234 / 0.98)),
+    radial-gradient(circle at 80% 0%, rgb(217 244 118 / 0.22), transparent 28rem);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0;
+}
+
+.dark body {
+  background:
+    linear-gradient(180deg, rgb(11 16 14 / 0.98), rgb(14 22 18 / 0.98)),
+    radial-gradient(circle at 90% 0%, rgb(217 244 118 / 0.11), transparent 30rem);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:not(:disabled),
+a[href],
+[role="button"]:not([aria-disabled="true"]),
+summary,
+label[for],
+select,
+input[type="file"] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.golf-hero-field {
+  background:
+    linear-gradient(180deg, rgb(205 228 207 / 0.72), rgb(246 241 228 / 0.82)),
+    url("data:image/svg+xml,%3Csvg width='900' height='520' viewBox='0 0 900 520' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 360 C150 315 220 382 355 340 C515 291 640 302 900 250 L900 520 L0 520 Z' fill='%237ba56b' fill-opacity='.35'/%3E%3Cpath d='M120 382 C240 332 355 386 487 352 C604 321 713 328 900 287' stroke='%2315221d' stroke-opacity='.16' stroke-width='3' fill='none'/%3E%3Ccircle cx='675' cy='176' r='17' fill='%23f9fbf5' stroke='%23dce4d7' stroke-width='3'/%3E%3Cpath d='M214 321 C356 278 516 225 675 176' stroke='%23ffffff' stroke-opacity='.8' stroke-width='4' stroke-dasharray='10 12' fill='none'/%3E%3Cpath d='M214 321 C356 278 516 225 675 176' stroke='%2315221d' stroke-opacity='.3' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='214' cy='321' r='8' fill='%23d9f476' stroke='%2315221d' stroke-width='3'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+}
+
+.metric-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.bubbly-surface {
+  box-shadow:
+    0 18px 60px rgb(21 34 29 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.65);
+}

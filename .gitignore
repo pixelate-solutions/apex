@@ -1,0 +1,14 @@
+.next
+node_modules
+out
+dist
+coverage
+*.tsbuildinfo
+.env*
+!.env.example
+.DS_Store
+data/*
+!data/.keep
+
+# clerk configuration (can include secrets)
+/.clerk/
