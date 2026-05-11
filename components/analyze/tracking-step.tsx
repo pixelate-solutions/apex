@@ -101,9 +101,10 @@ export function TrackingStep({
   }
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
-      <Card>
+    <div className="apex-workspace two-col">
+      <Card className="border-0 bg-transparent shadow-none">
         <CardHeader>
+          <p className="apex-stage-label">Tracking · F{String(selectedPoint?.frameIndex ?? calibration.startFrameIndex).padStart(4, "0")}</p>
           <CardTitle>Ball tracking</CardTitle>
           <CardDescription>Extract frames, detect the ball from image pixels, then inspect and correct the path.</CardDescription>
         </CardHeader>
@@ -138,8 +139,9 @@ export function TrackingStep({
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 bg-transparent shadow-none">
         <CardHeader>
+          <p className="apex-panel-label">Tracker</p>
           <CardTitle>Analysis controls</CardTitle>
           <CardDescription>Use a short early-flight window for the cleanest launch estimate.</CardDescription>
         </CardHeader>

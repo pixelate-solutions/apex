@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ConfidenceBadge } from "@/components/confidence-badge";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { MetricCard } from "@/components/metric-card";
 import { TrajectoryOverlay } from "@/components/analyze/trajectory-overlay";
 import { VideoCanvas } from "@/components/analyze/video-canvas";
@@ -57,16 +58,21 @@ export function ShotDetail({ id }: { id: string }) {
         </div>
         <div className="flex gap-2">
           <ConfidenceBadge confidence={shot.confidence} />
-          <Button
-            variant="outline"
-            onClick={() => {
+          <ConfirmDialog
+            title="Are you sure you want to delete this shot?"
+            description="This will permanently remove this saved analysis from local storage. This action cannot be undone."
+            confirmLabel="Delete shot"
+            onConfirm={() => {
               deleteShot(shot.id);
               window.location.href = "/shots";
             }}
-          >
-            <Trash2 className="h-4 w-4" />
-            Delete
-          </Button>
+            trigger={
+              <Button variant="outline">
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </Button>
+            }
+          />
         </div>
       </div>
 

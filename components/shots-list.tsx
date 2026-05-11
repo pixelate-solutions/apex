@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Trash2, Video } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ConfidenceBadge } from "@/components/confidence-badge";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteShot, listShots } from "@/lib/storage/shots";
@@ -71,17 +72,20 @@ export function ShotsList() {
                     <Button asChild size="sm" variant="outline">
                       <Link href={`/shots/${shot.id}`}>Open</Link>
                     </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      aria-label="Delete shot"
-                      onClick={() => {
+                    <ConfirmDialog
+                      title="Are you sure you want to delete this shot?"
+                      description="This will permanently remove this saved analysis from local storage. This action cannot be undone."
+                      confirmLabel="Delete shot"
+                      onConfirm={() => {
                         deleteShot(shot.id);
                         refresh();
                       }}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                      trigger={
+                        <Button size="icon" variant="ghost" aria-label="Delete shot">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      }
+                    />
                   </div>
                 </td>
               </tr>

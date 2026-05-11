@@ -1,27 +1,116 @@
+"use client";
+
 import { BrandMark, Nav } from "@/components/nav";
+import { PageTransition } from "@/components/motion/page-transition";
+import { UserButton, useAuth, useClerk, useUser } from "@clerk/nextjs";
+import { Monitor, Moon, Sun, UserCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+
+type ToolTheme = "light" | "dark" | "system";
+const THEME_KEY = "apex-tool-theme";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<ToolTheme>("system");
+  const clerk = useClerk();
+  const { isSignedIn } = useAuth();
+  const { user } = useUser();
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem(THEME_KEY);
+    if (stored === "light" || stored === "dark" || stored === "system") setTheme(stored);
+  }, []);
+
+  function updateTheme(next: ToolTheme) {
+    setTheme(next);
+    window.localStorage.setItem(THEME_KEY, next);
+  }
+
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-40 border-b bg-background/92 backdrop-blur lg:hidden">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3">
+    <div className="apex-console min-h-screen" data-tool-theme={theme}>
+      <aside className="apex-sidebar">
+        <div className="space-y-8">
           <BrandMark />
-          <Nav compact />
+          <Nav />
+        </div>
+
+        <div className="space-y-4">
+          <button
+            type="button"
+            className="apex-user-button"
+            aria-label="Open profile settings"
+            onClick={() => {
+              if (isSignedIn) {
+                clerk.openUserProfile();
+              } else {
+                clerk.openSignIn();
+              }
+            }}
+          >
+            {user?.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={user.imageUrl} alt="" className="h-10 w-10 shrink-0 rounded-full object-cover" />
+            ) : (
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary">
+                <UserCircle className="h-5 w-5" />
+              </span>
+            )}
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-foreground">Profile</p>
+              <p className="text-xs text-muted-foreground">Account and session</p>
+            </div>
+          </button>
+          <ThemeSwitcher theme={theme} onChange={updateTheme} />
+        </div>
+      </aside>
+
+      <header className="apex-mobilebar">
+        <BrandMark />
+        <div className="flex items-center gap-2">
+          <ThemeSwitcher theme={theme} onChange={updateTheme} compact />
+          <UserButton userProfileMode="modal" />
         </div>
       </header>
-      <div className="min-h-screen">
-        <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] border-r bg-background/96 px-5 py-6 backdrop-blur lg:block">
-          <BrandMark />
-          <div className="mt-8">
-            <Nav />
-          </div>
-          <div className="absolute bottom-6 left-5 right-5 rounded-3xl border bg-card p-4 text-sm text-muted-foreground bubbly-surface">
-            <p className="font-semibold text-foreground">Hybrid persistence</p>
-            <p className="mt-1">Local analysis remains available while server adapters handle accounts, objects, and shot records.</p>
-          </div>
-        </aside>
-        <main className="min-w-0 px-4 py-6 sm:px-6 lg:ml-[280px] lg:px-8">{children}</main>
+      <div className="apex-mobile-nav">
+        <Nav compact />
       </div>
+
+      <main className="apex-main min-w-0">
+        <PageTransition>{children}</PageTransition>
+      </main>
+    </div>
+  );
+}
+
+function ThemeSwitcher({
+  theme,
+  onChange,
+  compact = false,
+}: {
+  theme: ToolTheme;
+  onChange: (theme: ToolTheme) => void;
+  compact?: boolean;
+}) {
+  const options: { value: ToolTheme; label: string; icon: React.ReactNode }[] = [
+    { value: "system", label: "System", icon: <Monitor className="h-4 w-4" /> },
+    { value: "light", label: "Light", icon: <Sun className="h-4 w-4" /> },
+    { value: "dark", label: "Dark", icon: <Moon className="h-4 w-4" /> },
+  ];
+
+  return (
+    <div className="apex-theme-toggle" aria-label="Theme selector">
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          aria-pressed={theme === option.value}
+          title={option.label}
+          onClick={() => onChange(option.value)}
+          className={theme === option.value ? "is-active" : undefined}
+        >
+          {option.icon}
+          {!compact ? <span>{option.label}</span> : null}
+        </button>
+      ))}
     </div>
   );
 }

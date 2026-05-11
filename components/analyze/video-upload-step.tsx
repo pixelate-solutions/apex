@@ -36,41 +36,44 @@ export function VideoUploadStep({ video, fps, onFpsChange, onVideoChange }: Prop
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-      <Card className="overflow-hidden">
+    <div className="apex-workspace two-col">
+      <Card className="border-0 bg-transparent shadow-none">
         <CardHeader>
+          <p className="apex-stage-label">01 · Source clip</p>
           <CardTitle>Upload launch video</CardTitle>
           <CardDescription>Use a slow-motion clip with the ball visible for the first few frames after impact.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            onDragEnter={(event) => {
-              event.preventDefault();
-              setIsDragging(true);
-            }}
-            onDragOver={(event) => {
-              event.preventDefault();
-              setIsDragging(true);
-            }}
-            onDragLeave={(event) => {
-              event.preventDefault();
-              setIsDragging(false);
-            }}
-            onDrop={(event) => {
-              event.preventDefault();
-              setIsDragging(false);
-              handleFile(event.dataTransfer.files[0]);
-            }}
-            className={`flex min-h-56 w-full flex-col items-center justify-center rounded-3xl border border-dashed p-8 text-center transition-colors ${
-              isDragging ? "border-primary bg-accent/35" : "bg-muted/50 hover:bg-muted"
-            }`}
-          >
-            <Upload className="h-10 w-10" />
-            <span className="mt-4 text-lg font-bold">Drop in a shot video</span>
-            <span className="mt-1 text-sm text-muted-foreground">MP4, MOV, or WebM. Processing stays local.</span>
-          </button>
+          {!video ? (
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              onDragEnter={(event) => {
+                event.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragOver={(event) => {
+                event.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={(event) => {
+                event.preventDefault();
+                setIsDragging(false);
+              }}
+              onDrop={(event) => {
+                event.preventDefault();
+                setIsDragging(false);
+                handleFile(event.dataTransfer.files[0]);
+              }}
+              className={`apex-frame flex min-h-[420px] w-full flex-col items-center justify-center border border-dashed p-8 text-center transition-colors ${
+                isDragging ? "border-primary bg-accent/35" : "bg-muted/50 hover:bg-muted"
+              }`}
+            >
+              <Upload className="h-10 w-10" />
+              <span className="mt-4 text-lg font-bold">Drop in a shot video</span>
+              <span className="mt-1 text-sm text-muted-foreground">MP4, MOV, or WebM. Processing stays local.</span>
+            </button>
+          ) : null}
           <Input
             ref={inputRef}
             type="file"
@@ -79,24 +82,30 @@ export function VideoUploadStep({ video, fps, onFpsChange, onVideoChange }: Prop
             onChange={(event) => handleFile(event.target.files?.[0])}
           />
           {video ? (
-            <video
-              ref={videoRef}
-              src={video.url}
-              controls
-              playsInline
-              className="aspect-video w-full rounded-3xl border bg-black object-contain"
-              onLoadedMetadata={(event) => {
-                const nextDuration = event.currentTarget.duration;
-                setDuration(nextDuration);
-                onVideoChange({ ...video, durationSec: nextDuration });
-              }}
-            />
+            <div className="space-y-3">
+              <video
+                ref={videoRef}
+                src={video.url}
+                controls
+                playsInline
+                className="apex-frame aspect-video w-full border bg-black object-contain"
+                onLoadedMetadata={(event) => {
+                  const nextDuration = event.currentTarget.duration;
+                  setDuration(nextDuration);
+                  onVideoChange({ ...video, durationSec: nextDuration });
+                }}
+              />
+              <button type="button" className="text-sm font-semibold text-muted-foreground hover:text-foreground" onClick={() => inputRef.current?.click()}>
+                Replace video
+              </button>
+            </div>
           ) : null}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 border-l bg-transparent shadow-none">
         <CardHeader>
+          <p className="apex-panel-label">02 · Capture metadata</p>
           <CardTitle>Video metadata</CardTitle>
           <CardDescription>FPS is often missing from browser metadata, so confirm it before calibration.</CardDescription>
         </CardHeader>
@@ -143,9 +152,7 @@ export function VideoUploadStep({ video, fps, onFpsChange, onVideoChange }: Prop
           </div>
 
           <div
-            className={`rounded-3xl border p-4 ${
-              video ? "border-emerald-300 bg-emerald-50 text-emerald-950" : "border-red-200 bg-red-50 text-red-950"
-            }`}
+            className={`apex-status-card rounded-3xl border p-4 ${video ? "is-success" : "is-waiting"}`}
           >
             <div className="flex items-center gap-3">
               {video ? <CheckCircle2 className="h-5 w-5" /> : <CircleAlert className="h-5 w-5" />}

@@ -117,9 +117,10 @@ export function CalibrationStep({ video, fps, ballDiameterMm, calibration, onCal
   }
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
-      <Card>
+    <div className="apex-workspace two-col">
+      <Card className="border-0 bg-transparent shadow-none">
         <CardHeader>
+          <p className="apex-stage-label">Reference frame · F{String(startFrameIndex).padStart(4, "0")}</p>
           <CardTitle>Calibrate ball scale</CardTitle>
           <CardDescription>Scrub to the first clear post-impact frame, then place the marker over the ball diameter.</CardDescription>
         </CardHeader>
@@ -127,7 +128,7 @@ export function CalibrationStep({ video, fps, ballDiameterMm, calibration, onCal
           <video ref={videoRef} src={video.url} muted playsInline preload="metadata" className="hidden" />
           <canvas
             ref={canvasRef}
-            className="aspect-video w-full cursor-crosshair rounded-3xl border bg-black object-contain"
+            className="apex-frame aspect-video w-full cursor-crosshair border bg-black object-contain"
             onPointerDown={(event) => {
               const point = canvasPoint(event);
               const distance = Math.sqrt((point.x - center.x) ** 2 + (point.y - center.y) ** 2);
@@ -153,8 +154,9 @@ export function CalibrationStep({ video, fps, ballDiameterMm, calibration, onCal
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 bg-transparent shadow-none">
         <CardHeader>
+          <p className="apex-panel-label">02 · Calibration</p>
           <CardTitle>Calibration inputs</CardTitle>
           <CardDescription>These values control conversion from pixels to launch metrics.</CardDescription>
         </CardHeader>

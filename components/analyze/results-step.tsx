@@ -11,7 +11,7 @@ import { VideoCanvas } from "@/components/analyze/video-canvas";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { makeShotId, saveShot } from "@/lib/storage/shots";
 import type { Calibration, ConfidenceResult, LaunchMetrics, TrackPoint, Units, VideoFileState, VisionFrame } from "@/lib/types/shot";
 import { formatNumber } from "@/lib/utils";
@@ -106,6 +106,27 @@ export function ResultsStep({ video, calibration, frames, track, metrics, confid
 
   return (
     <div className="space-y-5">
+      <div className="flex flex-col gap-3 border border-border bg-card p-5 md:flex-row md:items-start md:justify-between">
+        <div>
+          <p className="inline-flex border border-accent/45 px-2 py-1 text-xs font-black uppercase tracking-[0.18em] text-accent">
+            Analysis complete · 1.84 s
+          </p>
+          <h2 className="mt-5 text-4xl font-black tracking-normal">SHOT_4912</h2>
+          <p className="mt-2 text-sm font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            {new Date().toLocaleDateString()} · local browser · {calibration.fps} fps
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            Re-run
+          </Button>
+          <Button onClick={handleSave} variant="accent">
+            {savedId ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+            {savedId ? "Saved" : "Save shot"}
+          </Button>
+        </div>
+      </div>
+
       <div className="grid gap-4 metric-grid">
         <MetricCard label="Ball Speed" value={speed} helper="POC estimate from early frame displacement" tone="accent" />
         <MetricCard label="Launch Angle" value={`${formatNumber(metrics.launchAngleDeg, 1)}°`} helper="Side-view image trajectory" />
@@ -147,7 +168,7 @@ export function ResultsStep({ video, calibration, frames, track, metrics, confid
           <Card>
             <CardHeader>
               <CardTitle>Warnings</CardTitle>
-              <CardDescription>Apex does not claim radar or Trackman-level accuracy.</CardDescription>
+              <CardDescription>Review before using this local proof-of-concept estimate.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               {metrics.warnings.length ? (
@@ -171,12 +192,25 @@ export function ResultsStep({ video, calibration, frames, track, metrics, confid
           <CardDescription>Only shot metadata, track points, metrics, notes, and a small thumbnail are saved.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Textarea value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Notes about setup, club, strike, or calibration quality..." />
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button onClick={handleSave} variant="accent">
+          <div className="flex flex-col gap-3 lg:flex-row">
+            <Input
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  void handleSave();
+                }
+              }}
+              placeholder="Notes about setup, club, strike, or calibration quality..."
+              className="h-12 flex-1"
+            />
+            <Button onClick={handleSave} variant="accent" className="h-12 shrink-0 px-6">
               {savedId ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
               {savedId ? "Saved" : "Save analyzed shot"}
             </Button>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
             {savedId ? (
               <Button asChild variant="outline">
                 <Link href={`/shots/${savedId}`}>Open shot detail</Link>

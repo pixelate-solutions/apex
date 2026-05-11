@@ -50,7 +50,7 @@ export function VideoCanvas({ frameDataUrl, points = [], selectedFrameIndex, met
     onCanvasClick(((event.clientX - rect.left) / rect.width) * canvas.width, ((event.clientY - rect.top) / rect.height) * canvas.height);
   }
 
-  return <canvas ref={canvasRef} onClick={handleClick} className="aspect-video w-full rounded-3xl border bg-black object-contain" />;
+  return <canvas ref={canvasRef} onClick={handleClick} className="apex-frame aspect-video w-full border bg-black object-contain" />;
 }
 
 function drawPoints(
